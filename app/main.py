@@ -3,10 +3,15 @@ import logging
 import os
 
 import joblib
+import mlflow
 import pandas as pd
+
+
 from flask import Flask, render_template, request
 from sklearn.datasets import load_breast_cancer
 from tensorflow.keras.models import load_model
+from mlflow.tracking import MlflowClient
+
 
 logger = logging.getLogger("app.main")
 
@@ -15,8 +20,9 @@ class ModelService:
     def __init__(self) -> None:
         self._load_artifacts()
 
+    """
     def _load_artifacts(self) -> None:
-        """Load all artifacts from the local project folder."""
+        #Load all artifacts from the local project folder.
         logger.info("Loading artifacts from local project folder")
 
         # Define base paths
@@ -41,6 +47,33 @@ class ModelService:
         self.model = load_model(model_path)
 
         logger.info("Successfully loaded all artifacts")
+    """
+
+    def _load_artifacts(self):
+        """Load the registered model from MLflow Model Registry and related artifacts from its run."""
+
+        # Load model from registry
+        logger.info("Loading registered model from MLflow Model Registry")
+        self.model = mlflow.keras.load_model("models:/model/latest")
+
+        # Get run_id from model version metadata
+        client = MlflowClient()
+        run_id = client.get_registered_model("model").latest_versions[0].run_id
+
+        # Load related artifacts
+        logger.info(f"Loading artifacts from run {run_id}")
+        artifacts_dir = mlflow.artifacts.download_artifacts(
+            run_id=run_id, artifact_path=""
+        )
+
+        imputer_path = os.path.join(artifacts_dir, "[features]_mean_imputer.joblib")
+        self.features_imputer = joblib.load(imputer_path)
+        scaler_path = os.path.join(artifacts_dir, "[features]_scaler.joblib")
+        self.features_scaler = joblib.load(scaler_path)
+        encoder_path = os.path.join(artifacts_dir, "[target]_one_hot_encoder.joblib")
+        self.target_encoder = joblib.load(encoder_path)
+
+        logger.info("Successfully loaded model and related artifacts")
 
     def predict(self, features: pd.DataFrame) -> pd.Series:
         """Make predictions using the full pipeline.
