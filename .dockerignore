@@ -11,7 +11,7 @@ data/**/*.csv
 metrics/*.json
 
 # MLflow
-./mlruns
+./mlruns/*
 !./mlruns/.gitkeep
 
 
