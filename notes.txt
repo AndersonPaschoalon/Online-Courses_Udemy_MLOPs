@@ -19,4 +19,19 @@
     
 
 
+# dvc
+
+* Rodar experimento modificando os parametros e saidas
+dvc exp run -S train.learning_rate=0.1
+
+* Rodar experimento sem modificar parametros
+dvc exp run -S train.learning_rate=0.1 --temp
+
+* Mostar experimentos
+dvc exp show
+
+* aplicar experimento 
+dvc exp apply 5507256
+
+
 

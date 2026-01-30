@@ -5,8 +5,8 @@ stages:
     deps:
     - path: src/data_loading/load_data.py
       hash: md5
-      md5: 2e44ca1b61cbe9ab249879a31ee1fc9c
-      size: 1342
+      md5: 4f1aa126ad374c8eca75deccb64f6378
+      size: 1464
     outs:
     - path: data/raw/raw.csv
       hash: md5
@@ -86,7 +86,7 @@ stages:
         train.epochs: 100
         train.hidden_layer_1_neurons: 64
         train.hidden_layer_2_neurons: 32
-        train.learning_rate: 0.001
+        train.learning_rate: 0.1
     outs:
     - path: artifacts/[target]_one_hot_encoder.joblib
       hash: md5
@@ -94,12 +94,12 @@ stages:
       size: 617
     - path: metrics/training.json
       hash: md5
-      md5: 626406b9074714d072842449ad73ffef
-      size: 141
+      md5: 205581320ed33ffbe198a29516e95197
+      size: 138
     - path: models/model.keras
       hash: md5
-      md5: bb9b9478ed269acf79b458d40547ee42
-      size: 79417
+      md5: 9bf1eb40eb65529bb958e473125c9519
+      size: 79415
   evaluate:
     cmd: python -m src.model_evaluation.evaluate_model
     deps:
@@ -113,8 +113,8 @@ stages:
       size: 67471
     - path: models/model.keras
       hash: md5
-      md5: bb9b9478ed269acf79b458d40547ee42
-      size: 79417
+      md5: 9bf1eb40eb65529bb958e473125c9519
+      size: 79415
     - path: src/model_evaluation/evaluate_model.py
       hash: md5
       md5: 1300021eeca5193c758efb74cfff4814
@@ -122,5 +122,5 @@ stages:
     outs:
     - path: metrics/evaluation.json
       hash: md5
-      md5: 59daa6592509147378f198eca799aaaf
-      size: 792
+      md5: d2ade61a88104f7822309eeae848a7c2
+      size: 793
