@@ -36,3 +36,6 @@ dvc exp apply 5507256
 # MLflow
 mlflow ui
 
+# Airflow
+airflow webserver
+airflow scheduler
